@@ -1,0 +1,98 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+@model IEnumerable<PizzaShop.Models.Pizza>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Available Pizzas</h1>
+
+<p>
+    @if (User.IsInRole("Admin") && SignInManager.IsSignedIn(User))
+    {
+    <a class="btn btn-primary" asp-action="Create">
+        <span  class="fa fa-plus-square">  Add Pizza</span>
+    </a>
+      }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+                
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Chefs)
+            </th>
+            
+            <th>
+                Toppings
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+                    @if (User.IsInRole("Admin") && SignInManager.IsSignedIn(User))
+                    {
+                        <sapn style="margin-left:10px; ">
+                            <a asp-action="Edit" asp-route-id="@item.Id">
+                            <span style="color:blue;" class="fa fa-pencil"></span>
+                        </a> |
+
+                        <a asp-action="Delete" asp-route-id="@item.Id">
+                            <span style="color:red;" class="fa fa-trash"></span>
+                        </a>
+                    </sapn>
+                    }
+            </td>
+            <td>
+                    <img style="width:100px;" src="@item.URL" alt="@item.Title" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Chefs.Name)
+
+                   
+               
+               
+
+                    
+            </td>
+            <td>
+                @foreach (var topping in ViewData["Toppings"] as List<Topping>)
+                {
+                    foreach (var toppingPizza in ViewData["ToppingPizza"] as List<ToppingPizza>)
+                    {
+                        if (topping.Id == toppingPizza.ToppingsId && item.Id == toppingPizza.PizzaId)
+                        {
+                            <div id="toppingBox">
+                                <span id="toppingName">@topping.Name</span>
+                            </div>
+
+                        }
+                    }
+                }
+            </td>
+
+        
+        </tr>
+}
+    </tbody>
+</table>

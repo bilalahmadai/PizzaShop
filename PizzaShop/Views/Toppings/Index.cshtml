@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model IEnumerable<PizzaShop.Models.Topping>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Toppings</h1>
+
+<p>
+    @if (User.IsInRole("Admin") && SignInManager.IsSignedIn(User))
+    {
+        <a class="btn btn-primary" asp-action="Create">
+            <span class="fa fa-plus-square">  Add Toppings</span>
+    </a>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+                    @if (User.IsInRole("Admin") && SignInManager.IsSignedIn(User))
+                    {
+                        <sapn style="margin-left:10px; ">
+                            <a asp-action="Edit" asp-route-id="@item.Id">
+                                <span style="color:blue;" class="fa fa-pencil"></span>
+                            </a> |
+
+                            <a asp-action="Delete" asp-route-id="@item.Id">
+                                <span style="color:red;" class="fa fa-trash"></span>
+                            </a>
+                        </sapn>
+                    }
+                </td>
+           
+        </tr>
+}
+    </tbody>
+</table>

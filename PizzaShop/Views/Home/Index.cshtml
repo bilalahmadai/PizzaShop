@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Identity;
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Home";
+}
+<div class="text-center">
+    <h1 class="display-4">PizzaSh<img width="50px" src="https://pngimg.com/uploads/pizza/pizza_PNG7149.png" />p</h1>
+    
+</div>
+
+<div class="row">
+    @foreach (var pizza in ViewData["Pizzas"] as List<Pizza>)
+    {
+        <div class=" col-lg-3 col-md-4 col-sm">
+
+
+
+            <article class="card">
+               
+                    <img class="card__image  img-fluid" src="@pizza.URL" alt="@pizza.URL" />
+
+                <div class="card__data">
+                    <a asp-controller="Pizzas" asp-action="PizzaDetails" asp-route-id="@pizza.Id">
+                    <div class="card__info">
+                        <h2>@pizza.Title</h2>
+                        <h3 class="card__price">$@pizza.Price</h3>
+                    </div>
+                   </a>
+                   @if (SignInManager.IsSignedIn(User))
+                {
+                    <form asp-controller="Orders" asp-action="Create">
+                    <input class="card__qty" type="number" name="qty" placeholder="0" value="" />
+                            <button id="btn" type="submit" class="card__add"><span style="color:White;" class="fa fa-cart-plus"></span></button>
+                        </form>
+                    }
+
+                </div>
+            </article>
+        </div>
+
+    }
+</div>
+
+
+
+<div class="text-center">
+    <img width="150px" src="https://media.istockphoto.com/id/1156391956/vector/creative-chef-hat-symbol-text-font-letter-logo-vector-design-illustration.jpg?s=612x612&w=0&k=20&c=YCuINBtwqFWVUlaP4ngCKbiQNy0jBbVO7PaBr12cznk=" />
+
+</div>
+
+<center>
+    <div class="row ">
+        @foreach (var chef in ViewData["Chefs"] as List<Chef>)
+        {
+            <div class=" col-lg-4 col-md-4 col-sm">
+                <div class="Chef-container">
+                    <div class="img-container">
+                        <img src="@chef.URL" alt="">
+                    </div>
+                    <ul class="social-media">
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                    </ul>
+                    <div class="user-info">
+                        <h2>@chef.Name</h2>
+                        <span class="fa fa-location-arrow"> @chef.Address</span>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</center>
+
